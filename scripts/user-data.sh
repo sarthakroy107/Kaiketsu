@@ -47,18 +47,6 @@ cd /home/ec2-user
 # Update system and install packages using yum
 yum -y update
 yum install git -y
-yum install ruby -y
-
-# Install AWS CodeDeploy agent
-curl -O https://aws-codedeploy-ap-south-1.s3.ap-south-1.amazonaws.com/latest/install
-
-# Make the install script executable
-chmod +x ./install
-
-# Run the install script
-sudo ./install auto
-
-sudo service codedeploy-agent start
 
 # Install NVM
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
@@ -88,9 +76,9 @@ source ~/.bashrc
 # Verify pnpm installation
 which pnpm || echo "pnpm not found"
 
-# Clone repository and build project
-# git clone https://github.com/sarthakroy107/Kaiketsu.git
-# cd Kaiketsu
-# pnpm i
-# pnpm build
-# pnpm start
+#Clone repository and build project
+git clone https://github.com/sarthakroy107/Kaiketsu.git
+cd Kaiketsu
+pnpm i
+pnpm build
+pnpm start

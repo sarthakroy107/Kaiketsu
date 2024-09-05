@@ -47,7 +47,7 @@ async function loginToSpotifyURL(code: string) {
   const spotifyTokenUrl = "https://accounts.spotify.com/api/token";
 
   const redirectUri = `${
-    env === "development" ? "http://localhost:3000" : "https://example.com"
+    env === "development" ? "http://localhost:3000" : "https://kaiketsu.online"
   }/spotify/callback`;
 
   const body = new URLSearchParams({

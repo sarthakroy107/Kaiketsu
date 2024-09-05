@@ -48,7 +48,7 @@ function loginToSpotifyURL() {
   ].join(",");
 
   const url = `${authUrl}?client_id=${spotifyClientId}&response_type=code&redirect_uri=${
-    env === "development" ? "http://localhost:3000" : "https://example.com"
+    env === "development" ? "http://localhost:3000" : "https://kaiketsu.online"
   }/spotify/callback&scope=${scopes}`;
 
   return url;

@@ -13,7 +13,7 @@ export default async function Page() {
       <div className="text-center">
         <h1 className="text-8xl font-semibold">Kaiketsu</h1>
         <p className="text-xl font-medium my-2 text-white/75">
-          Convert Spotify playlists to Youtube playlists
+          Convert Spotify playlist to Youtube playlist
         </p>
         <div className="flex justify-center mt-4 px-3">
           <Link

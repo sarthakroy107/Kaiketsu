@@ -54,6 +54,6 @@ export function DisplayTracks({ tracks }: { tracks: any[] }) {
   }, [YTTracks]);
 
   return (
-    <div>{YTTracks && <DataTable columns={colums} data={YTTracks} />}</div>
+    <>{YTTracks && <DataTable columns={colums} data={YTTracks} />}</>
   );
 }

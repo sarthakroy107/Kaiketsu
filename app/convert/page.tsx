@@ -57,13 +57,14 @@ export default function Page() {
   useEffect(() => {}, [tracks]);
 
   return (
-    <main className="min-h-screen w-full flex justify-center items-center">
-      <div className="flex flex-col items-center mt-36 mb-20">
-        <h1 className="text-5xl font-semibold mb-12">Convert playlist</h1>
+    <main className="w-full">
+      <div className="max-w-full flex flex-col items-center mt-40">
+        <h1 className="text-4xl g:text-5xl font-semibold mb-12">Convert playlist</h1>
         <form className="flex items-center mb-6" onSubmit={fetchTracks}>
           <input
             type="text"
-            className="h-10 w-[400px] rounded-l-full pl-5 pr-1 bg-[#1f1f1f] focus:outline-none text-white"
+            placeholder="Space your spotify url link here"
+            className="h-10 w-[300px] lg:w-[400px] rounded-l-full pl-5 pr-1 bg-[#1f1f1f] focus:outline-none text-white placeholder:text-slate-400/40"
             onChange={(e) => setPlaylistURL(e.target.value)}
           />
           <button

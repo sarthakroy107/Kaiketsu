@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 
 import {
@@ -22,7 +23,7 @@ import { FormEventHandler, useEffect, useState } from "react";
 import { addTracksToPlaylist, createPlaylist } from "../yt-functions";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
-import { BarLoader } from "react-spinners"
+import { BarLoader } from "react-spinners";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -41,10 +42,10 @@ export function DataTable<TData, TValue>({
 
   useEffect(() => {
     table.toggleAllPageRowsSelected(true);
-  }, [])
+  }, []);
 
   return (
-    <div className="text-center flex flex-col items-center">
+    <div className="max-w-full text-center flex flex-col items-center">
       <CreateYTPlaylist
         data={
           table
@@ -52,14 +53,14 @@ export function DataTable<TData, TValue>({
             .rows.map((row) => row.original) as YTVideo[]
         }
       />
-      <div className="rounded-md border bg-[#1f1f1f]/40">
+      <div className="max-w-[97%] text-center rounded-md border bg-[#1f1f1f]/40">
         <Table>
-          <TableHeader>
+          <TableHeader className="w-[4000px]">
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
                 {headerGroup.headers.map((header) => {
                   return (
-                    <TableHead key={header.id}>
+                    <TableHead className="" key={header.id}>
                       {header.isPlaceholder
                         ? null
                         : flexRender(
@@ -72,7 +73,59 @@ export function DataTable<TData, TValue>({
               </TableRow>
             ))}
           </TableHeader>
-          <TableBody>
+          <TableBody className="w-[4000px]">
+            {table.getRowModel().rows?.length ? (
+              table.getRowModel().rows.map((row) => (
+                <TableRow
+                  key={row.id}
+                  data-state={row.getIsSelected() && "selected"}
+                >
+                  {row.getVisibleCells().map((cell) => (
+                    <TableCell key={cell.id}>
+                      {flexRender(
+                        cell.column.columnDef.cell,
+                        cell.getContext()
+                      )}
+                    </TableCell>
+                  ))}
+                </TableRow>
+              ))
+            ) : (
+              <TableRow>
+                <TableCell
+                  colSpan={columns.length}
+                  className="h-24 text-center"
+                >
+                  No results.
+                </TableCell>
+              </TableRow>
+            )}
+            {table.getRowModel().rows?.length ? (
+              table.getRowModel().rows.map((row) => (
+                <TableRow
+                  key={row.id}
+                  data-state={row.getIsSelected() && "selected"}
+                >
+                  {row.getVisibleCells().map((cell) => (
+                    <TableCell key={cell.id}>
+                      {flexRender(
+                        cell.column.columnDef.cell,
+                        cell.getContext()
+                      )}
+                    </TableCell>
+                  ))}
+                </TableRow>
+              ))
+            ) : (
+              <TableRow>
+                <TableCell
+                  colSpan={columns.length}
+                  className="h-24 text-center"
+                >
+                  No results.
+                </TableCell>
+              </TableRow>
+            )}
             {table.getRowModel().rows?.length ? (
               table.getRowModel().rows.map((row) => (
                 <TableRow
@@ -116,6 +169,7 @@ function CreateYTPlaylist({ data }: { data: YTVideo[] }) {
   ) => {
     e.preventDefault();
     console.log("Creating playlist", playlistName);
+    setIsCreating(true);
 
     try {
       const playlistId = await createPlaylist(playlistName);
@@ -134,6 +188,7 @@ function CreateYTPlaylist({ data }: { data: YTVideo[] }) {
       console.error(error);
       toast.error("Error creating playlist");
     }
+    setIsCreating(false);
   };
   return (
     <Dialog>
@@ -141,7 +196,7 @@ function CreateYTPlaylist({ data }: { data: YTVideo[] }) {
         Convert to youtube playlist
         <LucideMoveRight className="inline-block ml-2" />
       </DialogTrigger>
-      <DialogContent className="bg-[#1f1f1f] border-black">
+      <DialogContent className="max-w-[95%] bg-[#1f1f1f] border-black">
         <form
           onSubmit={createPlaylistAndAddTracks}
           className="flex flex-col items-center"

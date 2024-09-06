@@ -79,13 +79,12 @@ export const colums: ColumnDef<YTVideo>[] = [
               <SiYoutube />
             </button>
           </DialogTrigger>
-          <DialogContent className="max-w-2xl flex justify-center bg-[#1f1f1f] border-black">
+          <DialogContent className="md:max-w-2xl w-fit flex justify-center bg-[#1f1f1f] border-black">
             <iframe
-              width="560"
-              height="315"
               src={`https://www.youtube.com/embed/${row.getValue("videoId")}`}
               title="YouTube video player"
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              className="md:w-[356] h-[200px] lg:w-[560px] lg:h-[315px]"
               allowFullScreen
             ></iframe>
           </DialogContent>

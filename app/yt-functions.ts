@@ -42,7 +42,7 @@ export async function createPlaylist(playlistName: string) {
 
   const playlist = await res.json();
   console.log("Playlist created successfully:", playlist);
-  return playlist.id;
+  return playlist.id as string;
 }
 
 export async function addTracksToPlaylist(tracks: YTVideo[], playlistId: string) {

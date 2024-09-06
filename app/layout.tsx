@@ -5,6 +5,8 @@ import { AnimatedStars } from "./animated-stars";
 import { cn } from "@/lib/utils";
 import { Toaster } from "@/components/ui/sonner";
 import { ThemeProvider } from "./theme-provider";
+import AuthProvider from "./_providers/auth";
+import { CSPostHogProvider } from "./_providers/posthog";
 
 const inter = Mulish({ subsets: ["latin"] });
 
@@ -21,18 +23,20 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={cn(inter.className, "text-white")}>
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="dark"
-          enableSystem={false}
-          themes={[
-            "dark"
-          ]}
-        >
-          <AnimatedStars />
-          {children}
-          <Toaster />
-        </ThemeProvider>
+        <AuthProvider>
+          <CSPostHogProvider>
+            <ThemeProvider
+              attribute="class"
+              defaultTheme="dark"
+              enableSystem={false}
+              themes={["dark"]}
+            >
+              <AnimatedStars />
+              {children}
+              <Toaster />
+            </ThemeProvider>
+          </CSPostHogProvider>
+        </AuthProvider>
       </body>
     </html>
   );

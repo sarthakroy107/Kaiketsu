@@ -1,13 +1,20 @@
 "use client";
+
 import { FormEventHandler, useEffect, useState } from "react";
 import { DisplayTracks } from "./dispay-tracks";
 import { LucideSearch } from "lucide-react";
 import { toast } from "sonner";
+import { useSession } from "next-auth/react";
+import { usePostHog } from "posthog-js/react";
+
 export default function Page() {
   const [playlistURL, setPlaylistURL] = useState<string>("");
   const [tracks, setTracks] = useState<any[] | null>(null);
+  const session = useSession();
+  const posthog = usePostHog();
 
   const fetchTracks: FormEventHandler<HTMLFormElement> = async (e) => {
+
     e.preventDefault();
 
     if (
@@ -40,6 +47,7 @@ export default function Page() {
     })
       .then(async (response) => {
         if (!response.ok) {
+          posthog.capture("Error fetching playlist 1 from spotify", { response: response });
           toast.error("Error fetching playlist 1");
         }
         return await response.json();
@@ -47,10 +55,13 @@ export default function Page() {
       .then((data: any) => {
         console.log(data);
         if (!data.items) {
+          posthog.capture("Error fetching playlist 2", { data: data });
           toast.error("Error fetching playlist 2");
+
           return;
         }
         setTracks(data.items);
+        posthog.capture("Spotify playlist fetched successfully", { playlistURL: playlistURL });
       });
   };
 

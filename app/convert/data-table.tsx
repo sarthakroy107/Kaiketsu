@@ -24,6 +24,7 @@ import { addTracksToPlaylist, createPlaylist } from "../yt-functions";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { BarLoader } from "react-spinners";
+import { usePostHog } from "posthog-js/react";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -163,6 +164,7 @@ function CreateYTPlaylist({ data }: { data: YTVideo[] }) {
   const [playlistName, setPlaylistName] = useState<string>("");
   const [isCreating, setIsCreating] = useState<boolean>(false);
   const router = useRouter();
+  const posthog = usePostHog();
 
   const createPlaylistAndAddTracks: FormEventHandler<HTMLFormElement> = async (
     e
@@ -174,6 +176,10 @@ function CreateYTPlaylist({ data }: { data: YTVideo[] }) {
     try {
       const playlistId = await createPlaylist(playlistName);
 
+      if (!playlistId) {
+        throw new Error("Error creating playlist");
+      }
+
       await addTracksToPlaylist(data, playlistId);
       console.log(playlistId);
       setTimeout(() => {
@@ -181,9 +187,11 @@ function CreateYTPlaylist({ data }: { data: YTVideo[] }) {
       }, 1000);
 
       toast.success("Playlist created successfully");
+      posthog.capture("Playlist created successfully", { playlistLink: `https://www.youtube.com/playlist?list=${playlistId}` });
       //window.open(`https://www.youtube.com/playlist?list=${playlistId}`);
       router.push("/convert");
     } catch (error) {
+      posthog.capture("Error while creating and shifting playlists", { error: error });
       console.error("Error creating playlist:", error);
       console.error(error);
       toast.error("Error creating playlist");

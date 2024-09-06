@@ -8,6 +8,7 @@ import { ThemeProvider } from "./_providers/theme-provider";
 import AuthProvider from "./_providers/auth";
 import { CSPostHogProvider } from "./_providers/posthog";
 import { Navbar } from "@/components/navbar";
+import { SpotifyLoginProvider } from "./_providers/context";
 
 const inter = Mulish({ subsets: ["latin"] });
 
@@ -32,10 +33,12 @@ export default function RootLayout({
               enableSystem={false}
               themes={["dark"]}
             >
-              <Navbar />
-              <AnimatedStars />
-              {children}
-              <Toaster />
+              <SpotifyLoginProvider>
+                <Navbar />
+                <AnimatedStars />
+                {children}
+                <Toaster />
+              </SpotifyLoginProvider>
             </ThemeProvider>
           </CSPostHogProvider>
         </AuthProvider>

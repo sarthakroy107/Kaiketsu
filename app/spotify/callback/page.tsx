@@ -1,8 +1,10 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 
+import { useSpotifyLogin } from "@/app/_providers/context";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
+import { RingLoader } from "react-spinners";
 import { toast } from "sonner";
 
 export default function Page({
@@ -12,15 +14,17 @@ export default function Page({
 }) {
   const router = useRouter();
   const code = searchParams.code;
+  const { setSpotifyLoggedIn } = useSpotifyLogin();
 
   useEffect(() => {
     (async () => {
       if (code) {
         const result = await loginToSpotifyURL(code);
-        console.log("Result:", result);
+        
         if (result) {
           toast.success("Successfully logged in to Spotify");
           router.push("/convert");
+          setSpotifyLoggedIn(true);
         }
       } else {
         toast.error("Code not found");
@@ -30,12 +34,8 @@ export default function Page({
   }, []);
 
   return (
-    <main>
-      <h1>Spotify</h1>
-      <p>{searchParams.code}</p>
-      <button className="border border-green-400 m-1 p-1">
-        Sign in with Spotify
-      </button>
+    <main className="flex justify-center items-center w-full h-screen">
+      <RingLoader color="#fff" size={75} />
     </main>
   );
 }

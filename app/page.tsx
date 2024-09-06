@@ -1,17 +1,27 @@
+"use client";
 import Link from "next/link";
 import "./stars.css";
-import React from "react";
-import { Youtube } from "lucide-react"
+import React, { useEffect } from "react";
+import { Youtube } from "lucide-react";
+import { useSpotifyLogin } from "./_providers/context";
+import { useSession } from "next-auth/react";
 
 // interface CustomCSSProperties extends React.CSSProperties {
 //   "--i"?: number;
 // }
 
-export default async function Page() {
+export default function Page() {
+  const { isSpotifyLoggedIn } = useSpotifyLogin();
+  const session = useSession();
+
+  useEffect(() => {}, []);
+
   return (
     <main className="w-full h-screen flex justify-center items-center text-white">
       <div className="text-center">
-        <h1 className="text-6xl md:text-6xl lg:text-8xl font-semibold">Kaiketsu</h1>
+        <h1 className="text-6xl md:text-6xl lg:text-8xl font-semibold">
+          Kaiketsu
+        </h1>
         <p className="text-base md:text-xl font-medium my-2 text-white/75">
           Convert Spotify playlist to Youtube playlist
         </p>
@@ -20,7 +30,12 @@ export default async function Page() {
             href={"/google"}
             className="bg-[#5b21b6] hover:bg-[#572b9e] transition w-48 p-2 rounded-[3px] text-xl font-medium "
           >
-            Get Started
+            {session.status === "authenticated" &&
+            session.data.user &&
+            session.data.user.googleAccessToken &&
+            isSpotifyLoggedIn
+              ? "Convert"
+              : "Get started"}
           </Link>
           <Link
             target="_blank"

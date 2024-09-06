@@ -3,17 +3,26 @@
 import { useRouter } from "next/navigation";
 import { SiSpotify } from "@icons-pack/react-simple-icons";
 import { useEffect } from "react";
+import { useSpotifyLogin } from "../_providers/context";
+import { useSession } from "next-auth/react";
 
 const Page = () => {
   const router = useRouter();
   const url = loginToSpotifyURL();
+  const { isSpotifyLoggedIn } = useSpotifyLogin();
+  const session = useSession();
 
   useEffect(() => {
-    const accessToken = localStorage.getItem("spotifyAccessToken");
-    if (accessToken) {
-      router.push("/convert");
+    if (isSpotifyLoggedIn) {
+      if (
+        session.status === "authenticated" &&
+        session.data.user &&
+        session.data.user.googleAccessToken
+      ) {
+        router.push("/convert");
+      } else router.push("/google");
     }
-  }, [])
+  }, []);
 
   return (
     <main className="w-full h-screen flex justify-center items-center">

@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 import { SiGithub, SiGoogle, SiSpotify } from "@icons-pack/react-simple-icons";
 import Image from "next/image";
@@ -10,17 +11,22 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { LucideEllipsisVertical } from "lucide-react";
+import { useSpotifyLogin } from "@/app/_providers/context";
+import { toast } from "sonner";
+import { usePathname, useRouter } from "next/navigation";
 
 export function Navbar() {
   return (
     <nav className="w-full h-16 bg-[#0b0b0b] backdrop:blur-[50px] fixed top-0 flex justify-between items-center border-b border-1 border-white/10">
-      <Image
-        src="/kaiketsu.svg"
-        alt="Logo"
-        width={150}
-        height={150}
-        className="ml-7"
-      />
+      <Link href={"/"} title="Home">
+        <Image
+          src="/kaiketsu.svg"
+          alt="Logo"
+          width={150}
+          height={150}
+          className="ml-7"
+        />
+      </Link>
       <div className="mr-10 flex items-center gap-x-2">
         <Link
           href={"https://github.com/sarthakroy107/kaiketsu"}
@@ -94,24 +100,24 @@ function GoogleButton() {
 }
 
 function SpotifyButton() {
-  const [signedToSpotify, setSignedToSpotify] = useState(false);
+  const { isSpotifyLoggedIn, setSpotifyLoggedIn } = useSpotifyLogin();
+  const pathname = usePathname();
+  const router = useRouter();
 
   useEffect(() => {
-    const accessToekn = localStorage.getItem("spotifyAccessToken");
-    if (accessToekn) {
-      setSignedToSpotify(true);
+    if (pathname === "/convert" && !isSpotifyLoggedIn) {
+      router.push("/");
     }
-  }, []);
-
-  useEffect(() => {}, [signedToSpotify]);
+  }, [isSpotifyLoggedIn]);
   return (
     <>
-      {signedToSpotify ? (
+      {isSpotifyLoggedIn ? (
         <button
           title="Sign out from Spotify"
           onClick={() => {
             signOutFromSpotify();
-            setSignedToSpotify(false);
+            toast.success("Successfully signed out from Spotify");
+            setSpotifyLoggedIn(false);
           }}
           className="bg-transparent hover:bg-[#1ed760] border border-[#1ed760] flex items-center px-4 text-[#1ed760] hover:text-red-500 py-1.5 gap-x-2 rounded-full font-semibold transition"
         >

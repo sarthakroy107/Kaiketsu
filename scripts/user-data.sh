@@ -37,6 +37,12 @@ echo "AUTH_URL: $AUTH_URL" >> $LOG_FILE 2>&1
 NEXTAUTH_URL=$(aws ssm get-parameters --region ap-south-1 --names /Kaiketsu/AuthURL --with-decryption --query Parameters[0].Value --output text)
 echo "NEXTAUTH_URL: $NEXTAUTH_URL" >> $LOG_FILE 2>&1
 
+NEXT_PUBLIC_POSTHOG_KEY=$(aws ssm get-parameters --region ap-south-1 --names /Kaiketsu/posthog-key --with-decryption --query Parameters[0].Value --output text)
+echo "NEXT_PUBLIC_POSTHOG_KEY: $NEXT_PUBLIC_POSTHOG_KEY" >> $LOG_FILE 2>&1
+
+NEXT_PUBLIC_POSTHOG_HOST=$(aws ssm get-parameters --region ap-south-1 --names /Kaiketsu/posthog-host --with-decryption --query Parameters[0].Value --output text)
+echo "NEXT_PUBLIC_POSTHOG_HOST: $NEXT_PUBLIC_POSTHOG_HOST" >> $LOG_FILE 2>&1
+
 # Export environment variables
 export NEXT_PUBLIC_ENV
 export NEXT_PUBLIC_SPOTIFY_CLIENT_ID
@@ -48,6 +54,8 @@ export AUTH_SECRET
 export AUTH_TRUST_HOST
 export AUTH_URL
 export NEXTAUTH_URL
+export NEXT_PUBLIC_POSTHOG_KEY
+export NEXT_PUBLIC_POSTHOG_HOST
 
 # Change to the user's home directory and log the working directory
 cd /home/ec2-user

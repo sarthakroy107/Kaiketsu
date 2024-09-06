@@ -101,58 +101,6 @@ export function DataTable<TData, TValue>({
                 </TableCell>
               </TableRow>
             )}
-            {table.getRowModel().rows?.length ? (
-              table.getRowModel().rows.map((row) => (
-                <TableRow
-                  key={row.id}
-                  data-state={row.getIsSelected() && "selected"}
-                >
-                  {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id}>
-                      {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext()
-                      )}
-                    </TableCell>
-                  ))}
-                </TableRow>
-              ))
-            ) : (
-              <TableRow>
-                <TableCell
-                  colSpan={columns.length}
-                  className="h-24 text-center"
-                >
-                  No results.
-                </TableCell>
-              </TableRow>
-            )}
-            {table.getRowModel().rows?.length ? (
-              table.getRowModel().rows.map((row) => (
-                <TableRow
-                  key={row.id}
-                  data-state={row.getIsSelected() && "selected"}
-                >
-                  {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id}>
-                      {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext()
-                      )}
-                    </TableCell>
-                  ))}
-                </TableRow>
-              ))
-            ) : (
-              <TableRow>
-                <TableCell
-                  colSpan={columns.length}
-                  className="h-24 text-center"
-                >
-                  No results.
-                </TableCell>
-              </TableRow>
-            )}
           </TableBody>
         </Table>
       </div>
@@ -181,17 +129,21 @@ function CreateYTPlaylist({ data }: { data: YTVideo[] }) {
       }
 
       await addTracksToPlaylist(data, playlistId);
-      console.log(playlistId);
+      //console.log(playlistId);
       setTimeout(() => {
         window.open(`https://www.youtube.com/playlist?list=${playlistId}`);
-      }, 1000);
+        router.push("/");
+      }, 2000);
 
       toast.success("Playlist created successfully");
-      posthog.capture("Playlist created successfully", { playlistLink: `https://www.youtube.com/playlist?list=${playlistId}` });
+      posthog.capture("Playlist created successfully", {
+        playlistLink: `https://www.youtube.com/playlist?list=${playlistId}`,
+      });
       //window.open(`https://www.youtube.com/playlist?list=${playlistId}`);
-      router.push("/convert");
     } catch (error) {
-      posthog.capture("Error while creating and shifting playlists", { error: error });
+      posthog.capture("Error while creating and shifting playlists", {
+        error: error,
+      });
       console.error("Error creating playlist:", error);
       console.error(error);
       toast.error("Error creating playlist");
@@ -204,7 +156,7 @@ function CreateYTPlaylist({ data }: { data: YTVideo[] }) {
         Convert to youtube playlist
         <LucideMoveRight className="inline-block ml-2" />
       </DialogTrigger>
-      <DialogContent className="max-w-[95%] bg-[#1f1f1f] border-black">
+      <DialogContent className="max-w-[95%] md:max-w-lg bg-[#1f1f1f] border-black">
         <form
           onSubmit={createPlaylistAndAddTracks}
           className="flex flex-col items-center"
@@ -226,6 +178,11 @@ function CreateYTPlaylist({ data }: { data: YTVideo[] }) {
           >
             {isCreating ? <BarLoader /> : "Create"}
           </button>
+          <p className="text-xs md:text-sm text-white/60 mt-3 text-center">
+            Videos will appear in playlist after{" "}
+            <b className="text-white/80">1-2 minutes</b>. Please refresh YT
+            playlist frequently
+          </p>
         </form>
       </DialogContent>
     </Dialog>

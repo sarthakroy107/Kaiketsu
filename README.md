@@ -70,15 +70,20 @@ AUTH_SECRET=
 AUTH_TRUST_HOST= #true
 
 
-NEXT_PUBLIC_GOOGLE_API_KEY=
+GOOGLE_API_KEY=
 NEXT_PUBLIC_SPOTIFY_CLIENT_ID=
 NEXT_PUBLIC_SPOTIFY_CLIENT_SECRET=
+NEXT_PUBLIC_POSTHOG_KEY=
+NEXT_PUBLIC_POSTHOG_HOST=
 
 NEXT_PUBLIC_ENV= #development
 ```
->[!Info]
-> Google developer console: [console](console.cloud.google.com/apis/credentials)
-> Spotify developer conseole: [console](https://developer.spotify.com/)
+
+Get your own credentials
+- Get your API keys and Client Secrets
+- Google developer console: [console](console.cloud.google.com/apis/credentials)
+- Spotify developer conseole: [console](https://developer.spotify.com/)
+- Posthog: [website](https://posthog.com/)
 
 **Step 5:** Start the development server
 ```bash

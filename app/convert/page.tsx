@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 
 import { FormEventHandler, useEffect, useState } from "react";
@@ -5,14 +6,19 @@ import { DisplayTracks } from "./dispay-tracks";
 import { LucideSearch } from "lucide-react";
 import { toast } from "sonner";
 import { usePostHog } from "posthog-js/react";
+import { useSpotifyLogin } from "../_providers/context";
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
 export default function Page() {
   const [playlistURL, setPlaylistURL] = useState<string>("");
   const [tracks, setTracks] = useState<any[] | null>(null);
   const posthog = usePostHog();
+  const { isSpotifyLoggedIn } = useSpotifyLogin();
+  const session = useSession();
+  const router = useRouter();
 
   const fetchTracks: FormEventHandler<HTMLFormElement> = async (e) => {
-
     e.preventDefault();
 
     if (
@@ -45,7 +51,9 @@ export default function Page() {
     })
       .then(async (response) => {
         if (!response.ok) {
-          posthog.capture("Error fetching playlist 1 from spotify", { response: response });
+          posthog.capture("Error fetching playlist 1 from spotify", {
+            response: response,
+          });
           toast.error("Error fetching playlist 1");
         }
         return await response.json();
@@ -59,16 +67,40 @@ export default function Page() {
           return;
         }
         setTracks(data.items);
-        posthog.capture("Spotify playlist fetched successfully", { playlistURL: playlistURL });
+        posthog.capture("Spotify playlist fetched successfully", {
+          playlistURL: playlistURL,
+        });
       });
   };
+
+  useEffect(() => {
+    if (
+      isSpotifyLoggedIn &&
+      session.status === "authenticated" &&
+      session.data.user &&
+      session.data.user.googleAccessToken
+    ) {
+      // Do something when the conditions are met
+    } else if (
+      session.status === "unauthenticated" ||
+      !session.data ||
+      !session.data.user ||
+      !session.data.user.googleAccessToken
+    ) {
+      router.push("/google");
+    } else if (!isSpotifyLoggedIn) {
+      router.push("/spotify");
+    }
+  }, [session, isSpotifyLoggedIn]);
 
   useEffect(() => {}, [tracks]);
 
   return (
     <main className="w-full">
       <div className="max-w-full flex flex-col items-center mt-40">
-        <h1 className="text-4xl g:text-5xl font-semibold mb-12">Convert playlist</h1>
+        <h1 className="text-4xl g:text-5xl font-semibold mb-12">
+          Convert playlist
+        </h1>
         <form className="flex items-center mb-6" onSubmit={fetchTracks}>
           <input
             type="text"

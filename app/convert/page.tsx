@@ -4,13 +4,11 @@ import { FormEventHandler, useEffect, useState } from "react";
 import { DisplayTracks } from "./dispay-tracks";
 import { LucideSearch } from "lucide-react";
 import { toast } from "sonner";
-import { useSession } from "next-auth/react";
 import { usePostHog } from "posthog-js/react";
 
 export default function Page() {
   const [playlistURL, setPlaylistURL] = useState<string>("");
   const [tracks, setTracks] = useState<any[] | null>(null);
-  const session = useSession();
   const posthog = usePostHog();
 
   const fetchTracks: FormEventHandler<HTMLFormElement> = async (e) => {
@@ -96,4 +94,3 @@ export default function Page() {
     </main>
   );
 }
-//https://open.spotify.com/playlist/37i9dQZF1EpotQ7qohgqYx?si=94e69ac58dac46ac

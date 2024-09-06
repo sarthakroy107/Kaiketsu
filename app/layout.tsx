@@ -4,9 +4,10 @@ import "./globals.css";
 import { AnimatedStars } from "./animated-stars";
 import { cn } from "@/lib/utils";
 import { Toaster } from "@/components/ui/sonner";
-import { ThemeProvider } from "./theme-provider";
+import { ThemeProvider } from "./_providers/theme-provider";
 import AuthProvider from "./_providers/auth";
 import { CSPostHogProvider } from "./_providers/posthog";
+import { Navbar } from "@/components/navbar";
 
 const inter = Mulish({ subsets: ["latin"] });
 
@@ -31,6 +32,7 @@ export default function RootLayout({
               enableSystem={false}
               themes={["dark"]}
             >
+              <Navbar />
               <AnimatedStars />
               {children}
               <Toaster />
